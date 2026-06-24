@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anas Mahmoud Naser — Architect & Site Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   CSS CUSTOM PROPERTIES
+============================================= */
+:root {
+  --bg:         #09090E;
+  --surface:    #0F0F18;
+  --surface2:   #141420;
+  --gold:       #C9A84C;
+  --gold-light: #E2C47A;
+  --gold-dim:   rgba(201,168,76,0.12);
+  --white:      #F0EDE6;
+  --muted:      #6B6875;
+  --line:       rgba(201,168,76,0.15);
+  --ff-display: 'Cormorant Garamond', Georgia, serif;
+  --ff-body:    'Inter', sans-serif;
+  --ff-arabic:  'Tajawal', sans-serif;
+  --nav-h:      72px;
+  --max-w:      1200px;
+  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* =============================================
+   RESET & BASE
+============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--ff-body);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+html[lang="ar"] body { font-family: var(--ff-arabic); }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* =============================================
+   SCROLLBAR
+============================================= */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+/* =============================================
+   ARCHITECTURAL GRID SIGNATURE ELEMENT
+   The unique element: a golden technical-drawing
+   grid that lives behind every section heading
+============================================= */
+.arch-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* =============================================
+   NAVIGATION
+============================================= */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 1000;
+  transition: background var(--transition), backdrop-filter var(--transition);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(9,9,14,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom-color: var(--line);
+}
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+}
+.nav-logo {
+  font-family: var(--ff-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+}
+.nav-logo span { color: var(--white); font-weight: 300; }
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color var(--transition);
+  position: relative;
+  padding-bottom: 4px;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width var(--transition);
+}
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+/* Language Switcher */
+.lang-switcher {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.lang-btn {
+  font-size: 1.1rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: transform var(--transition), opacity var(--transition);
+  opacity: 0.5;
+  line-height: 1;
+}
+.lang-btn:hover, .lang-btn.active { opacity: 1; transform: scale(1.2); }
+.lang-btn.active { outline: 1px solid var(--gold); border-radius: 3px; }
+
+/* Hamburger */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px; height: 1px;
+  background: var(--white);
+  transition: var(--transition);
+}
+.nav-mobile {
+  display: none;
+  position: fixed;
+  top: var(--nav-h); left: 0; right: 0;
+  background: rgba(9,9,14,0.97);
+  backdrop-filter: blur(20px);
+  padding: 24px 32px 32px;
+  z-index: 999;
+  border-bottom: 1px solid var(--line);
+}
+.nav-mobile.open { display: block; }
+.nav-mobile ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+.nav-mobile a {
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color var(--transition);
+}
+.nav-mobile a:hover { color: var(--gold); }
+.nav-mobile .lang-switcher { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
+
+/* =============================================
+   HERO
+============================================= */
+#home {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: var(--nav-h);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+}
+.hero-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 80px 32px;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+.hero-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 32px; height: 1px;
+  background: var(--gold);
+}
+.hero-name {
+  font-family: var(--ff-display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.hero-name em {
+  font-style: italic;
+  color: var(--gold);
+}
+.hero-title {
+  font-family: var(--ff-display);
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 28px;
+}
+.hero-quote {
+  font-family: var(--ff-display);
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.5;
+  border-left: 2px solid var(--gold);
+  padding-left: 20px;
+  margin-bottom: 44px;
+  opacity: 0.85;
+}
+html[lang="ar"] .hero-quote { border-left: none; border-right: 2px solid var(--gold); padding-left: 0; padding-right: 20px; }
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: var(--gold);
+  color: var(--bg);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background var(--transition), transform var(--transition);
+}
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+.btn-outline:hover { background: var(--gold-dim); transform: translateY(-1px); }
+
+/* Hero Photo Frame */
+.hero-photo-wrap {
+  position: relative;
+}
+.hero-photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+.hero-photo-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, var(--bg) 100%);
+  z-index: 2;
+}
+.hero-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(20%) contrast(1.05);
+  transition: filter var(--transition);
+}
+.hero-photo-frame:hover img { filter: grayscale(0%) contrast(1.05); }
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, var(--surface2), var(--surface));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 20px;
+}
+.photo-placeholder svg { opacity: 0.3; }
+.hero-photo-corner {
+  position: absolute;
+  width: 48px; height: 48px;
+  border-color: var(--gold);
+  border-style: solid;
+  z-index: 3;
+}
+.hero-photo-corner.tl { top: -8px; left: -8px; border-width: 1px 0 0 1px; }
+.hero-photo-corner.br { bottom: -8px; right: -8px; border-width: 0 1px 1px 0; }
+
+/* =============================================
+   SECTION COMMONS
+============================================= */
+.section {
+  padding: 100px 0;
+  position: relative;
+}
+.section-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.section-header {
+  margin-bottom: 64px;
+}
+.section-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-eyebrow::after {
+  content: '';
+  flex: 1;
+  max-width: 60px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.5;
+}
+.section-title {
+  font-family: var(--ff-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.section-title em { font-style: italic; color: var(--gold); }
+
+/* Fade-in animation */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+.fade-in-delay-1 { transition-delay: 0.1s; }
+.fade-in-delay-2 { transition-delay: 0.2s; }
+.fade-in-delay-3 { transition-delay: 0.3s; }
+.fade-in-delay-4 { transition-delay: 0.4s; }
+
+/* =============================================
+   STATS BAR
+============================================= */
+.stats-bar {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 40px 0;
+}
+.stats-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.stat-item {
+  text-align: center;
+  padding: 20px;
+  border-right: 1px solid var(--line);
+}
+.stat-item:last-child { border-right: none; }
+.stat-number {
+  font-family: var(--ff-display);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* =============================================
+   ABOUT
+============================================= */
+#about { background: var(--surface); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-text p {
+  color: rgba(240,237,230,0.75);
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  line-height: 1.85;
+}
+.about-text p:last-child { margin-bottom: 0; }
+.about-mission {
+  font-family: var(--ff-display);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--gold);
+  line-height: 1.5;
+  border-left: 2px solid var(--gold);
+  padding-left: 20px;
+  margin: 32px 0;
+}
+html[lang="ar"] .about-mission { border-left: none; border-right: 2px solid var(--gold); padding-left: 0; padding-right: 20px; }
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.timeline-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 20px;
+  position: relative;
+  padding-bottom: 32px;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 29px;
+  top: 24px;
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+html[lang="ar"] .timeline-item::before { left: auto; right: 29px; }
+.timeline-item:last-child::before { display: none; }
+.timeline-year {
+  font-family: var(--ff-display);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  padding-top: 2px;
+  position: relative;
+  z-index: 1;
+}
+.timeline-year::after {
+  content: '';
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 9px;
+  width: 8px; height: 8px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: var(--bg);
+}
+html[lang="ar"] .timeline-year::after { left: auto; right: calc(100% + 10px); }
+.timeline-content h4 {
+  font-family: var(--ff-display);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.timeline-content p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* =============================================
+   PORTFOLIO
+============================================= */
+#portfolio { background: var(--bg); }
+.portfolio-filter {
+  display: flex;
+  gap: 0;
+  margin-bottom: 48px;
+  border: 1px solid var(--line);
+  width: fit-content;
+}
+.filter-btn {
+  padding: 10px 24px;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-right: 1px solid var(--line);
+  transition: all var(--transition);
+}
+.filter-btn:last-child { border-right: none; }
+.filter-btn:hover, .filter-btn.active {
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+}
+.project-card {
+  background: var(--surface);
+  overflow: hidden;
+  position: relative;
+  group: true;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+.project-card:hover { z-index: 2; }
+.project-card-img {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  position: relative;
+}
+.project-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--surface2) 0%, var(--surface) 50%, #1a1a28 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition);
+}
+.project-card:hover .project-img-placeholder { transform: scale(1.04); }
+.project-img-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.project-img-icon {
+  font-size: 2rem;
+  opacity: 0.2;
+  z-index: 1;
+}
+.project-card-body {
+  padding: 20px 24px 24px;
+}
+.project-category {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.project-card-body h3 {
+  font-family: var(--ff-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: 6px;
+  transition: color var(--transition);
+}
+.project-card:hover .project-card-body h3 { color: var(--gold); }
+.project-card-body p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.project-year {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.project-arrow {
+  color: var(--gold);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all var(--transition);
+  font-size: 0.9rem;
+}
+html[lang="ar"] .project-arrow { transform: translateX(6px); }
+.project-card:hover .project-arrow { opacity: 1; transform: translateX(0); }
+
+/* =============================================
+   VIDEO SECTION
+============================================= */
+#videos { background: var(--surface); }
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.video-card {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  transition: border-color var(--transition), transform var(--transition);
+}
+.video-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+.video-thumb {
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, var(--surface2), #1a1a2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.video-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+.play-btn {
+  width: 52px; height: 52px;
+  border: 1px solid rgba(201,168,76,0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  z-index: 1;
+  background: rgba(9,9,14,0.6);
+}
+.play-btn svg { margin-left: 3px; }
+.video-card:hover .play-btn {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.video-card:hover .play-btn svg path { fill: var(--bg); }
+.video-info {
+  padding: 16px 20px;
+}
+.video-info h4 {
+  font-family: var(--ff-display);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 4px;
+  transition: color var(--transition);
+}
+.video-card:hover .video-info h4 { color: var(--gold); }
+.video-info p {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.video-add-note {
+  font-size: 0.72rem;
+  color: var(--gold);
+  opacity: 0.6;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* =============================================
+   RESEARCH
+============================================= */
+#research { background: var(--bg); }
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.research-card {
+  border: 1px solid var(--line);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition), transform var(--transition);
+}
+.research-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-2px); }
+.research-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 2px; height: 0;
+  background: var(--gold);
+  transition: height var(--transition);
+}
+html[lang="ar"] .research-card::before { left: auto; right: 0; }
+.research-card:hover::before { height: 100%; }
+.research-tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.research-tag::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: var(--gold);
+}
+.research-card h3 {
+  font-family: var(--ff-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 12px;
+  line-height: 1.3;
+  transition: color var(--transition);
+}
+.research-card:hover h3 { color: var(--gold); }
+.research-card p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.research-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.research-link {
+  color: var(--gold);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap var(--transition);
+}
+.research-card:hover .research-link { gap: 10px; }
+
+/* =============================================
+   CV SECTION
+============================================= */
+#cv { background: var(--surface); }
+.cv-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 60px;
+}
+.cv-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+.skill-row { display: flex; flex-direction: column; gap: 6px; }
+.skill-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--white);
+  letter-spacing: 0.05em;
+}
+.skill-level { color: var(--gold); font-size: 0.72rem; }
+.skill-bar {
+  height: 2px;
+  background: var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.skill-fill {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+html[lang="ar"] .skill-fill { left: auto; right: 0; }
+.skill-fill.animated { width: var(--skill-w); }
+.cv-sidebar { display: flex; flex-direction: column; gap: 32px; }
+.cv-box {
+  border: 1px solid var(--line);
+  padding: 28px;
+}
+.cv-box h4 {
+  font-family: var(--ff-display);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.lang-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.82rem;
+}
+.lang-row:last-child { border-bottom: none; }
+.lang-dots {
+  display: flex;
+  gap: 4px;
+}
+.lang-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+}
+.lang-dot.filled { background: var(--gold); }
+.volunteer-item {
+  font-size: 0.82rem;
+  color: rgba(240,237,230,0.7);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  line-height: 1.5;
+}
+.volunteer-item:last-child { border-bottom: none; }
+.volunteer-item strong { color: var(--white); display: block; margin-bottom: 2px; }
+.cv-download-wrap {
+  text-align: center;
+  margin-top: 40px;
+}
+.cv-download-wrap .hero-ctas { justify-content: center; }
+.cv-strength-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cv-strength-list li {
+  font-size: 0.8rem;
+  color: rgba(240,237,230,0.75);
+  line-height: 1.5;
+  padding-left: 18px;
+  position: relative;
+}
+.cv-strength-list li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 7px;
+  width: 6px; height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+html[lang="ar"] .cv-strength-list li { padding-left: 0; padding-right: 18px; }
+html[lang="ar"] .cv-strength-list li::before { left: auto; right: 0; }
+
+/* =============================================
+   CV VIEWER MODAL
+============================================= */
+.cv-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(9,9,14,0.92);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.cv-modal.open { display: flex; }
+.cv-modal-box {
+  width: 100%;
+  max-width: 880px;
+  height: 88vh;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.cv-modal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.cv-modal-bar span {
+  font-family: var(--ff-display);
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+}
+.cv-modal-close {
+  color: var(--muted);
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 4px 8px;
+  transition: color var(--transition);
+}
+.cv-modal-close:hover { color: var(--gold); }
+.cv-modal-box iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: var(--white);
+}
+
+/* =============================================
+   CONTACT
+============================================= */
+#contact {
+  background: var(--bg);
+  padding-bottom: 0;
+}
+.contact-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 100px 32px 0;
+  text-align: center;
+}
+.contact-inner .section-eyebrow { justify-content: center; }
+.contact-inner .section-eyebrow::after { display: none; }
+.contact-tagline {
+  font-family: var(--ff-display);
+  font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(240,237,230,0.7);
+  max-width: 600px;
+  margin: 16px auto 48px;
+  line-height: 1.5;
+}
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 64px;
+}
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: 1px solid var(--line);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  transition: all var(--transition);
+}
+.contact-link:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+.contact-link .link-icon { font-size: 1.1rem; }
+.footer-bar {
+  border-top: 1px solid var(--line);
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+.footer-bar a { color: var(--gold); transition: opacity var(--transition); }
+.footer-bar a:hover { opacity: 0.7; }
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media (max-width: 1024px) {
+  .hero-inner { grid-template-columns: 1fr 340px; gap: 60px; }
+  .about-grid { gap: 48px; }
+  .cv-layout { grid-template-columns: 1fr; }
+  .cv-sidebar { display: grid; grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nav-links, .lang-switcher { display: none; }
+  .nav-toggle { display: flex; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    padding: 60px 24px;
+    text-align: center;
+  }
+  .hero-eyebrow { justify-content: center; }
+  .hero-quote { text-align: left; }
+  html[lang="ar"] .hero-quote { text-align: right; }
+  .hero-ctas { justify-content: center; }
+  .hero-photo-wrap { max-width: 280px; margin: 0 auto; }
+  .hero-inner > *:first-child { order: 2; }
+  .hero-photo-wrap { order: 1; }
+  .about-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .stat-item:nth-child(2) { border-right: none; }
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .video-grid { grid-template-columns: 1fr; }
+  .research-grid { grid-template-columns: 1fr; }
+  .cv-sidebar { grid-template-columns: 1fr; }
+  .footer-bar { flex-direction: column; gap: 8px; text-align: center; }
+  .section { padding: 72px 0; }
+}
+
+@media (max-width: 480px) {
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .hero-ctas { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- =============================================
+     NAVIGATION
+============================================= -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo" id="navLogo">Anas <span>Naser</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" data-t="nav_home">Home</a></li>
+      <li><a href="#about" data-t="nav_about">About</a></li>
+      <li><a href="#portfolio" data-t="nav_portfolio">Portfolio</a></li>
+      <li><a href="#videos" data-t="nav_videos">Videos</a></li>
+      <li><a href="#research" data-t="nav_research">Research</a></li>
+      <li><a href="#cv" data-t="nav_cv">CV</a></li>
+      <li><a href="#contact" data-t="nav_contact">Contact</a></li>
+    </ul>
+    <div class="lang-switcher" id="langSwitcher">
+      <button class="lang-btn active" data-lang="en" title="English">🇬🇧</button>
+      <button class="lang-btn" data-lang="ar" title="العربية">🇸🇦</button>
+      <button class="lang-btn" data-lang="fr" title="Français">🇫🇷</button>
+      <button class="lang-btn" data-lang="es" title="Español">🇪🇸</button>
+      <button class="lang-btn" data-lang="pt" title="Português">🇵🇹</button>
+      <button class="lang-btn" data-lang="ru" title="Русский">🇷🇺</button>
+      <button class="lang-btn" data-lang="tr" title="Türkçe">🇹🇷</button>
+      <button class="lang-btn" data-lang="it" title="Italiano">🇮🇹</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="nav-mobile" id="navMobile">
+  <ul>
+    <li><a href="#home" data-t="nav_home">Home</a></li>
+    <li><a href="#about" data-t="nav_about">About</a></li>
+    <li><a href="#portfolio" data-t="nav_portfolio">Portfolio</a></li>
+    <li><a href="#videos" data-t="nav_videos">Videos</a></li>
+    <li><a href="#research" data-t="nav_research">Research</a></li>
+    <li><a href="#cv" data-t="nav_cv">CV</a></li>
+    <li><a href="#contact" data-t="nav_contact">Contact</a></li>
+  </ul>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="en">🇬🇧</button>
+    <button class="lang-btn" data-lang="ar">🇸🇦</button>
+    <button class="lang-btn" data-lang="fr">🇫🇷</button>
+    <button class="lang-btn" data-lang="es">🇪🇸</button>
+    <button class="lang-btn" data-lang="pt">🇵🇹</button>
+    <button class="lang-btn" data-lang="ru">🇷🇺</button>
+    <button class="lang-btn" data-lang="tr">🇹🇷</button>
+    <button class="lang-btn" data-lang="it">🇮🇹</button>
+  </div>
+</div>
+
+<!-- CV Viewer Modal -->
+<div class="cv-modal" id="cvModal">
+  <div class="cv-modal-box">
+    <div class="cv-modal-bar">
+      <span data-t="cv_title_inline">Curriculum Vitae</span>
+      <button class="cv-modal-close" id="cvModalClose" aria-label="Close">✕</button>
+    </div>
+    <iframe id="cvModalFrame" src="" title="CV"></iframe>
+  </div>
+</div>
+
+<!-- =============================================
+     HERO
+============================================= -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="arch-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-content fade-in">
+      <p class="hero-eyebrow" id="heroEyebrow">Architect & Site Engineer</p>
+      <h1 class="hero-name">Anas<br><em>Mahmoud</em><br>Naser</h1>
+      <p class="hero-title" data-t="hero_subtitle">Damascus University · 10+ Years of Experience</p>
+      <p class="hero-title" style="color:var(--gold);font-size:0.8rem;letter-spacing:0.08em;margin-top:-8px" data-t="hero_relocation">Open to Relocation — International Infrastructure Megaprojects</p>
+      <blockquote class="hero-quote" data-t="hero_quote">
+        Architecture is not just design —<br>it is a civilization written in stone.
+      </blockquote>
+      <div class="hero-ctas">
+        <a href="#portfolio" class="btn-primary" data-t="hero_cta1">View Portfolio</a>
+        <a href="#" class="btn-outline cv-view-btn" data-t="cv_view">👁 View CV</a>
+        <a href="CV.pdf" download class="btn-outline" data-t="hero_cta2">⬇ Download CV</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap fade-in fade-in-delay-2">
+      <div class="hero-photo-frame">
+        <div class="hero-photo-corner tl"></div>
+        <div class="hero-photo-corner br"></div>
+        <img src="anas-profile.jpg" alt="Anas Mahmoud Naser" 
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="photo-placeholder" style="display:none">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="18" r="8" stroke="#C9A84C" stroke-width="1"/>
+            <path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#C9A84C" stroke-width="1"/>
+          </svg>
+          <span style="font-size:0.72rem;letter-spacing:0.1em;text-align:center">Upload<br>anas-profile.jpg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     STATS BAR
+============================================= -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item fade-in">
+      <div class="stat-number">10+</div>
+      <div class="stat-label" data-t="stat1">Years of Experience</div>
+    </div>
+    <div class="stat-item fade-in fade-in-delay-1">
+      <div class="stat-number">6+</div>
+      <div class="stat-label" data-t="stat2">Major Projects</div>
+    </div>
+    <div class="stat-item fade-in fade-in-delay-2">
+      <div class="stat-number">3</div>
+      <div class="stat-label" data-t="stat3">Cities Impacted</div>
+    </div>
+    <div class="stat-item fade-in fade-in-delay-3">
+      <div class="stat-number">2</div>
+      <div class="stat-label" data-t="stat4">Languages</div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     ABOUT
+============================================= -->
+<section id="about" class="section">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="fade-in">
+        <div class="section-header">
+          <p class="section-eyebrow" data-t="about_eyebrow">Who I Am</p>
+          <h2 class="section-title" data-t="about_title">Building Spaces,<br><em>Shaping Communities</em></h2>
+        </div>
+        <div class="about-text">
+          <p data-t="about_p1">
+            I am Anas Mahmoud Naser, an architect and site engineer based in As-Suwayda, Syria, 
+            with a Bachelor of Architecture from Damascus University (2014). Over more than a decade, 
+            I have dedicated my practice to the spaces where people truly live — infrastructure 
+            that serves, buildings that endure, and communities that flourish.
+          </p>
+          <blockquote class="about-mission" data-t="about_mission">
+            "I build spaces that serve communities, preserve heritage, and inspire the future."
+          </blockquote>
+          <p data-t="about_p2">
+            My career spans field supervision of water and sewage systems, the execution of 
+            residential complexes, and the design of community facilities — always with rigorous 
+            attention to quality, safety, and technical precision. I began in Najran village, 
+            contributing to tourism and heritage development, before settling in As-Suwayda City 
+            to continue broader engineering and civic engagement.
+          </p>
+          <p data-t="about_p3">
+            Beyond construction, I have served as a volunteer mathematics and physics instructor 
+            with the Syrian Arab Red Crescent (2017–2023), a commitment that reflects my belief 
+            that architects bear responsibility not only for the buildings they raise, but for the 
+            people who inhabit them.
+          </p>
+          <p data-t="about_p4">
+            My objective is to bring this combined field-execution and design expertise to 
+            large-scale infrastructure and utilities megaprojects in Saudi Arabia and the wider 
+            Gulf region, where disciplined site supervision and fast-track delivery are critical 
+            to success.
+          </p>
+        </div>
+      </div>
+      <div class="fade-in fade-in-delay-2">
+        <div class="section-header">
+          <p class="section-eyebrow" data-t="timeline_eyebrow">Career Path</p>
+          <h2 class="section-title" style="font-size:1.8rem" data-t="timeline_title">A Decade<br><em>of Practice</em></h2>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">2014</div>
+            <div class="timeline-content">
+              <h4 data-t="tl1_title">Architecture Degree</h4>
+              <p data-t="tl1_desc">Graduated from Damascus University, Faculty of Architecture — the foundation of a lifelong practice.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2014</div>
+            <div class="timeline-content">
+              <h4 data-t="tl2_title">Najran Village Projects</h4>
+              <p data-t="tl2_desc">Contributed to tourism and heritage development initiatives, working to protect architectural identity and stimulate the local economy.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2016</div>
+            <div class="timeline-content">
+              <h4 data-t="tl3_title">Site Engineer — As-Suwayda</h4>
+              <p data-t="tl3_desc">Led supervision of major infrastructure projects: sewage networks, water systems, and residential complexes across the governorate.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2017</div>
+            <div class="timeline-content">
+              <h4 data-t="tl4_title">Red Crescent Volunteer</h4>
+              <p data-t="tl4_desc">Six years of volunteer teaching in mathematics and physics — a parallel commitment to community service alongside engineering work.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2024+</div>
+            <div class="timeline-content">
+              <h4 data-t="tl5_title">Present & Forward</h4>
+              <p data-t="tl5_desc">Continuing architectural practice while expanding into research, publication, and international engagement.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     PORTFOLIO
+============================================= -->
+<section id="portfolio" class="section">
+  <div class="section-inner">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow" data-t="portfolio_eyebrow">Selected Works</p>
+      <h2 class="section-title" data-t="portfolio_title">Portfolio of<br><em>Projects</em></h2>
+    </div>
+    <div class="portfolio-filter fade-in">
+      <button class="filter-btn active" data-filter="all" data-t="filter_all">All Works</button>
+      <button class="filter-btn" data-filter="exterior" data-t="filter_ext">Exterior Design</button>
+      <button class="filter-btn" data-filter="interior" data-t="filter_int">Interior Design</button>
+      <button class="filter-btn" data-filter="infrastructure" data-t="filter_infra">Infrastructure</button>
+    </div>
+    <div class="portfolio-grid" id="portfolioGrid">
+      <!-- Project cards injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     VIDEO STORIES
+============================================= -->
+<section id="videos" class="section">
+  <div class="section-inner">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow" data-t="videos_eyebrow">Visual Stories</p>
+      <h2 class="section-title" data-t="videos_title">Projects<br><em>in Motion</em></h2>
+    </div>
+    <div class="video-grid">
+      <div class="video-card fade-in">
+        <div class="video-thumb">
+          <div class="play-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 2l10 6-10 6V2z" fill="#C9A84C"/></svg>
+          </div>
+        </div>
+        <div class="video-info">
+          <h4 data-t="vid1_title">Youth Housing Complex — Walkthrough</h4>
+          <p data-t="vid1_desc">12-building residential complex, As-Suwayda</p>
+          <p class="video-add-note" data-t="vid_add">Add YouTube link to activate</p>
+        </div>
+      </div>
+      <div class="video-card fade-in fade-in-delay-1">
+        <div class="video-thumb">
+          <div class="play-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 2l10 6-10 6V2z" fill="#C9A84C"/></svg>
+          </div>
+        </div>
+        <div class="video-info">
+          <h4 data-t="vid2_title">Charitable Social Center — Process</h4>
+          <p data-t="vid2_desc">Design to completion documentation</p>
+          <p class="video-add-note" data-t="vid_add">Add YouTube link to activate</p>
+        </div>
+      </div>
+      <div class="video-card fade-in fade-in-delay-2">
+        <div class="video-thumb">
+          <div class="play-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 2l10 6-10 6V2z" fill="#C9A84C"/></svg>
+          </div>
+        </div>
+        <div class="video-info">
+          <h4 data-t="vid3_title">Najran Heritage Village — Site Tour</h4>
+          <p data-t="vid3_desc">Tourism development and structural identity</p>
+          <p class="video-add-note" data-t="vid_add">Add YouTube link to activate</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     RESEARCH
+============================================= -->
+<section id="research" class="section">
+  <div class="section-inner">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow" data-t="research_eyebrow">Academic Journal</p>
+      <h2 class="section-title" data-t="research_title">Research &<br><em>Writings</em></h2>
+    </div>
+    <div class="research-grid" id="researchGrid">
+      <!-- Research cards injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     CV
+============================================= -->
+<section id="cv" class="section">
+  <div class="section-inner">
+    <div class="section-header fade-in">
+      <p class="section-eyebrow" data-t="cv_eyebrow">Professional Profile</p>
+      <h2 class="section-title" data-t="cv_title">Curriculum<br><em>Vitae</em></h2>
+    </div>
+    <div class="cv-layout">
+      <div class="fade-in">
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:8px;letter-spacing:0.05em" data-t="cv_skills_title">TECHNICAL SKILLS</p>
+        <div class="cv-skills" id="skillsContainer"></div>
+        <div class="cv-download-wrap">
+          <div class="hero-ctas">
+            <a href="#" class="btn-outline cv-view-btn" data-t="cv_view">👁 View CV</a>
+            <a href="CV.pdf" download class="btn-primary" data-t="cv_download">
+              ⬇ &nbsp;Download Full CV
+            </a>
+          </div>
+          <p style="font-size:0.72rem;color:var(--muted);margin-top:12px" data-t="cv_download_note">PDF · Available in English</p>
+        </div>
+      </div>
+      <div class="cv-sidebar fade-in fade-in-delay-2">
+        <div class="cv-box">
+          <h4 data-t="cv_lang_title">Languages</h4>
+          <div class="lang-row">
+            <span data-t="lang_arabic">Arabic</span>
+            <div class="lang-dots">
+              <div class="lang-dot filled"></div><div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div><div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+            </div>
+          </div>
+          <div class="lang-row">
+            <span data-t="lang_english">English (B2)</span>
+            <div class="lang-dots">
+              <div class="lang-dot filled"></div><div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div><div class="lang-dot filled"></div>
+              <div class="lang-dot"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cv-box">
+          <h4 data-t="cv_strengths_title">Key Strengths</h4>
+          <ul class="cv-strength-list">
+            <li data-t="strength1">10+ years of direct field experience in water supply, sewage & utility networks</li>
+            <li data-t="strength2">Full architectural design — plans & façades — for a 9-villa residential development</li>
+            <li data-t="strength3">Proven BoQ preparation, technical reporting & phase-by-phase site documentation</li>
+            <li data-t="strength4">Mobilization-ready for fast-track, multicultural megaproject environments</li>
+          </ul>
+        </div>
+        <div class="cv-box">
+          <h4 data-t="cv_vol_title">Volunteer Work</h4>
+          <div class="volunteer-item">
+            <strong data-t="vol1_org">Syrian Arab Red Crescent</strong>
+            <span data-t="vol1_desc">Volunteer teacher · Mathematics & Physics · 2017–2023 · Najran & As-Suwayda City centers</span>
+          </div>
+          <div class="volunteer-item">
+            <strong data-t="vol2_org">Najran Primary School</strong>
+            <span data-t="vol2_desc">Free educational support in Mathematics & Physics for students of all levels</span>
+          </div>
+        </div>
+        <div class="cv-box">
+          <h4 data-t="cv_edu_title">Education</h4>
+          <div class="volunteer-item">
+            <strong data-t="edu1_title">B.Sc. Architecture</strong>
+            <span data-t="edu1_org">Damascus University · 2014</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     CONTACT
+============================================= -->
+<section id="contact" class="section" style="padding-bottom:0">
+  <div class="contact-inner">
+    <p class="section-eyebrow" style="justify-content:center" data-t="contact_eyebrow">Get In Touch</p>
+    <h2 class="section-title fade-in" data-t="contact_title">Let's Build<br><em>Something Together</em></h2>
+    <p class="contact-tagline fade-in" data-t="contact_tagline">
+      Whether you have a project, a question, or simply want to connect — I'd love to hear from you.
+    </p>
+    <div class="contact-links fade-in">
+      <a href="mailto:anasthearchi88@gmail.com" class="contact-link">
+        <span class="link-icon">✉</span>
+        <span>anasthearchi88@gmail.com</span>
+      </a>
+      <a href="tel:+963933614982" class="contact-link">
+        <span class="link-icon">📞</span>
+        <span>+963 933 614 982</span>
+      </a>
+      <a href="https://www.behance.net/f588a8ae" target="_blank" rel="noopener" class="contact-link">
+        <span class="link-icon">🎨</span>
+        <span>Behance Portfolio</span>
+      </a>
+      <a href="#" class="contact-link" id="fbLink">
+        <span class="link-icon">📘</span>
+        <span data-t="contact_fb">Facebook</span>
+      </a>
+      <a href="#" class="contact-link" id="igLink">
+        <span class="link-icon">📷</span>
+        <span data-t="contact_ig">Instagram</span>
+      </a>
+    </div>
+    <footer class="footer-bar">
+      <span>© 2025 Anas Mahmoud Naser. All rights reserved.</span>
+      <span>As-Suwayda, Syria &nbsp;·&nbsp; <a href="mailto:anasthearchi88@gmail.com">anasthearchi88@gmail.com</a></span>
+    </footer>
+  </div>
+</section>
+
+<script>
+// =============================================
+// ✏️ EASY EDIT ZONE — Change values here only
+// =============================================
+const OWNER = {
+  name: "Anas Mahmoud Naser",
+  email: "anasthearchi88@gmail.com",
+  phone: "+963 933 614 982",
+  facebook: "#",          // ← paste your Facebook URL here
+  instagram: "#",         // ← paste your Instagram URL here
+  behance: "https://www.behance.net/f588a8ae",
+  cvFile: "CV.pdf",
+  photo: "anas-profile.jpg"
+};
+
+const PROJECTS = [
+  { id:"p1", category:"infrastructure", title:"Sewage Network — Mardak & Majdal", year:"2016–2020", desc:"Supervised excavation, pipe laying, and network testing across two villages, ensuring full compliance with technical specifications.", icon:"🏗️" },
+  { id:"p2", category:"infrastructure", title:"Youth Housing Complex", year:"2018–2022", desc:"Managed execution of 12 residential buildings (5 floors each) including water systems, upper/lower tanks, and shared corridors.", icon:"🏢" },
+  { id:"p3", category:"infrastructure", title:"Charitable Social Center", year:"2019–2021", desc:"Full execution of a medical, educational, and administrative facility — delivered on schedule with complete phase documentation.", icon:"🏛️" },
+  { id:"p4", category:"exterior", title:"Najran Heritage Village", year:"2014–2016", desc:"Design and execution of tourism and heritage projects protecting structural identity while stimulating the local economy.", icon:"🏺" },
+  { id:"p5", category:"exterior", title:"Residential Facade Design", year:"2020", desc:"Architectural facade design for a residential building in As-Suwayda, blending contemporary aesthetics with regional character.", icon:"🏠" },
+  { id:"p6", category:"interior", title:"Community Clinic Interior", year:"2021", desc:"Interior layout and finishing specification for medical clinic spaces within the Charitable Social Center project.", icon:"🏥" },
+  { id:"p7", category:"exterior", title:"9-Villa Classical Residential Development", year:"2020–2023", desc:"Led the full architectural design — plans and façades — for nine classical-style villas, demonstrating design capability for premium residential developments.", icon:"🏘️" },
+  { id:"p8", category:"infrastructure", title:"Residential Villas & Apartments — Execution", year:"2016–2026", desc:"Direct site supervision of execution and finishing works for residential villas and apartment buildings across As-Suwayda Governorate.", icon:"🧱" }
+];
+
+const RESEARCH = [
+  { title:"Architectural Identity in Southern Syria", category:"Architecture", date:"2023", abstract:"An investigation into the vernacular building traditions of As-Suwayda Governorate and strategies for their preservation in contemporary construction.", link:"#" },
+  { title:"Astronomical Orientation in Ancient Buildings", category:"Archaeoastronomy", date:"2022", abstract:"Exploring the astronomical alignments embedded in ancient structures across the Hauran region — a field bridging architecture, history, and celestial observation.", link:"#" },
+  { title:"Heritage Tourism & Community Development", category:"Urban Planning", date:"2021", abstract:"A study of how heritage tourism projects in rural Syrian villages can sustainably protect cultural assets while generating economic opportunity for local populations.", link:"#" },
+  { title:"Add Your Research Title Here", category:"Your Field", date:"2024", abstract:"This is a placeholder for your next publication. Edit the RESEARCH array in the JavaScript section to add your own research articles and papers.", link:"#" }
+];
+
+const SKILLS = [
+  { name:"AutoCAD", level:"Advanced", pct:95 },
+  { name:"Revit", level:"Advanced", pct:90 },
+  { name:"3D Studio Max (V-Ray & Corona)", level:"Advanced", pct:85 },
+  { name:"Blender — 3D & Rendering", level:"Advanced", pct:85 },
+  { name:"ArchiCAD", level:"Good", pct:75 },
+  { name:"Water Supply & Sewage Supervision", level:"Excellent", pct:98 },
+  { name:"Construction Site & Contractor Management", level:"Excellent", pct:97 },
+  { name:"Technical Reporting & Documentation", level:"Excellent", pct:96 },
+  { name:"Microsoft Office", level:"Advanced", pct:92 },
+  { name:"AI Platforms (Image/Video/BIM Generation)", level:"Advanced", pct:88 },
+  { name:"English (Technical)", level:"B2", pct:72 }
+];
+
+// =============================================
+// TRANSLATIONS
+// =============================================
+const T = {
+  en: {
+    nav_home:"Home", nav_about:"About", nav_portfolio:"Portfolio", nav_videos:"Videos",
+    nav_research:"Research", nav_cv:"CV", nav_contact:"Contact",
+    hero_subtitle:"Damascus University · 10+ Years of Experience",
+    hero_quote:"Architecture is not just design —\nit is a civilization written in stone.",
+    hero_cta1:"View Portfolio", hero_cta2:"⬇ Download CV", hero_relocation:"Open to Relocation — International Infrastructure Megaprojects", cv_view:"👁 View CV", cv_title_inline:"Curriculum Vitae",
+    stat1:"Years of Experience", stat2:"Major Projects", stat3:"Cities Impacted", stat4:"Languages",
+    about_eyebrow:"Who I Am", about_title:"Building Spaces,\nShaping Communities",
+    about_mission:'"I build spaces that serve communities, preserve heritage, and inspire the future."',
+    about_p1:"I am Anas Mahmoud Naser, an architect and site engineer based in As-Suwayda, Syria, with a Bachelor of Architecture from Damascus University (2014). Over more than a decade, I have dedicated my practice to the spaces where people truly live — infrastructure that serves, buildings that endure, and communities that flourish.",
+    about_p2:"My career spans field supervision of water and sewage systems, the execution of residential complexes, and the design of community facilities — always with rigorous attention to quality, safety, and technical precision.",
+    about_p3:"Beyond construction, I have served as a volunteer mathematics and physics instructor with the Syrian Arab Red Crescent (2017–2023), a commitment that reflects my belief that architects bear responsibility not only for the buildings they raise, but for the people who inhabit them.",
+    about_p4:"My objective is to bring this combined field-execution and design expertise to large-scale infrastructure and utilities megaprojects in Saudi Arabia and the wider Gulf region, where disciplined site supervision and fast-track delivery are critical to success.",
+    timeline_eyebrow:"Career Path", timeline_title:"A Decade\nof Practice",
+    tl1_title:"Architecture Degree", tl1_desc:"Graduated from Damascus University, Faculty of Architecture.",
+    tl2_title:"Najran Village Projects", tl2_desc:"Tourism and heritage development, protecting architectural identity.",
+    tl3_title:"Site Engineer — As-Suwayda", tl3_desc:"Led supervision of major infrastructure projects across the governorate.",
+    tl4_title:"Red Crescent Volunteer", tl4_desc:"Six years of volunteer teaching in mathematics and physics.",
+    tl5_title:"Present & Forward", tl5_desc:"Expanding into research, publication, and international engagement.",
+    portfolio_eyebrow:"Selected Works", portfolio_title:"Portfolio of\nProjects",
+    filter_all:"All Works", filter_ext:"Exterior Design", filter_int:"Interior Design", filter_infra:"Infrastructure",
+    videos_eyebrow:"Visual Stories", videos_title:"Projects\nin Motion",
+    vid1_title:"Youth Housing Complex — Walkthrough", vid1_desc:"12-building residential complex, As-Suwayda",
+    vid2_title:"Charitable Social Center — Process", vid2_desc:"Design to completion documentation",
+    vid3_title:"Najran Heritage Village — Site Tour", vid3_desc:"Tourism development and structural identity",
+    vid_add:"Add YouTube link to activate",
+    research_eyebrow:"Academic Journal", research_title:"Research &\nWritings",
+    cv_eyebrow:"Professional Profile", cv_title:"Curriculum\nVitae",
+    cv_skills_title:"TECHNICAL SKILLS", cv_download:"⬇  Download Full CV", cv_download_note:"PDF · Available in English",
+    cv_lang_title:"Languages", lang_arabic:"Arabic (Native)", lang_english:"English (B2)",
+    cv_strengths_title:"Key Strengths",
+    strength1:"10+ years of direct field experience in water supply, sewage & utility networks",
+    strength2:"Full architectural design — plans & façades — for a 9-villa residential development",
+    strength3:"Proven BoQ preparation, technical reporting & phase-by-phase site documentation",
+    strength4:"Mobilization-ready for fast-track, multicultural megaproject environments",
+    cv_vol_title:"Volunteer Work", vol1_org:"Syrian Arab Red Crescent", vol1_desc:"Volunteer teacher · Mathematics & Physics · 2017–2023 · Najran & As-Suwayda City centers",
+    vol2_org:"Najran Primary School", vol2_desc:"Free educational support in Mathematics & Physics for students of all levels",
+    cv_edu_title:"Education", edu1_title:"B.Sc. Architecture", edu1_org:"Damascus University · 2014",
+    contact_eyebrow:"Get In Touch", contact_title:"Let's Build\nSomething Together",
+    contact_tagline:"Whether you have a project, a question, or simply want to connect — I'd love to hear from you.",
+    contact_fb:"Facebook", contact_ig:"Instagram",
+    read_more:"Read Article →"
+  },
+  ar: {
+    nav_home:"الرئيسية", nav_about:"عني", nav_portfolio:"أعمالي", nav_videos:"فيديوهات",
+    nav_research:"أبحاث", nav_cv:"السيرة الذاتية", nav_contact:"تواصل",
+    hero_subtitle:"جامعة دمشق · أكثر من 10 سنوات خبرة",
+    hero_quote:"العمارة ليست مجرد تصميم —\nإنها حضارة مكتوبة بالحجر.",
+    hero_cta1:"استعرض الأعمال", hero_cta2:"⬇ تحميل السيرة الذاتية", hero_relocation:"مستعد للانتقال — لمشاريع البنية التحتية الدولية الكبرى", cv_view:"👁 معاينة السيرة الذاتية", cv_title_inline:"السيرة الذاتية",
+    stat1:"سنوات الخبرة", stat2:"مشاريع كبرى", stat3:"مدن خدمتها", stat4:"لغات",
+    about_eyebrow:"من أنا", about_title:"بناء الفضاءات،\nتشكيل المجتمعات",
+    about_mission:'"أبني فضاءات تخدم المجتمعات، وتصون التراث، وتلهم المستقبل."',
+    about_p1:"أنا أنس محمود ناصر، مهندس معماري ومهندس موقع من السويداء، سوريا، حاصل على بكالوريوس العمارة من جامعة دمشق (2014). على مدى أكثر من عقد، كرّست ممارستي للفضاءات التي يعيش فيها الناس فعلاً.",
+    about_p2:"تمتد مسيرتي المهنية لتشمل الإشراف الميداني على أعمال المياه والصرف الصحي وتنفيذ المجمعات السكنية وتصميم المرافق المجتمعية.",
+    about_p3:"خارج أعمال البناء، عملت متطوعاً لتعليم الرياضيات والفيزياء في الهلال الأحمر العربي السوري (2017–2023).",
+    about_p4:"هدفي هو تقديم هذه الخبرة الميدانية والتصميمية المشتركة لمشاريع البنية التحتية والمرافق الكبرى في المملكة العربية السعودية ومنطقة الخليج، حيث يُعدّ الإشراف الميداني المنضبط والتسليم السريع عاملين أساسيين لنجاح المشروع.",
+    timeline_eyebrow:"المسيرة المهنية", timeline_title:"عقد\nمن الممارسة",
+    tl1_title:"شهادة العمارة", tl1_desc:"تخرجت من كلية الهندسة المعمارية، جامعة دمشق.",
+    tl2_title:"مشاريع قرية نجران", tl2_desc:"تطوير السياحة والتراث، وحماية الهوية المعمارية.",
+    tl3_title:"مهندس موقع — السويداء", tl3_desc:"قيادة الإشراف على مشاريع البنية التحتية الكبرى.",
+    tl4_title:"متطوع في الهلال الأحمر", tl4_desc:"ست سنوات من التدريس التطوعي في الرياضيات والفيزياء.",
+    tl5_title:"الحاضر والمستقبل", tl5_desc:"التوسع في البحث والنشر والتواصل الدولي.",
+    portfolio_eyebrow:"أعمال مختارة", portfolio_title:"محفظة\nالمشاريع",
+    filter_all:"جميع الأعمال", filter_ext:"تصاميم خارجية", filter_int:"تصاميم داخلية", filter_infra:"البنية التحتية",
+    videos_eyebrow:"قصص مرئية", videos_title:"المشاريع\nفي حركة",
+    vid1_title:"مجمع الشباب السكني — جولة", vid1_desc:"مجمع سكني من 12 مبنى، السويداء",
+    vid2_title:"المركز الاجتماعي الخيري — التوثيق", vid2_desc:"من التصميم حتى الاكتمال",
+    vid3_title:"قرية نجران التراثية — جولة ميدانية", vid3_desc:"التطوير السياحي والهوية الإنشائية",
+    vid_add:"أضف رابط يوتيوب للتفعيل",
+    research_eyebrow:"المجلة الأكاديمية", research_title:"الأبحاث\nوالكتابات",
+    cv_eyebrow:"الملف المهني", cv_title:"السيرة\nالذاتية",
+    cv_skills_title:"المهارات التقنية", cv_download:"⬇  تحميل السيرة الذاتية كاملة", cv_download_note:"PDF · متاحة باللغة الإنجليزية",
+    cv_lang_title:"اللغات", lang_arabic:"العربية (اللغة الأم)", lang_english:"الإنجليزية (B2)",
+    cv_strengths_title:"أبرز نقاط القوة",
+    strength1:"أكثر من 10 سنوات خبرة ميدانية مباشرة في شبكات المياه والصرف الصحي والمرافق",
+    strength2:"تصميم معماري كامل — مخططات وواجهات — لمشروع سكني من 9 فلل",
+    strength3:"خبرة مثبتة في إعداد جداول الكميات والتقارير الفنية والتوثيق الدوري للمشروع",
+    strength4:"جاهز للتعبئة السريعة في بيئات المشاريع الكبرى متعددة الثقافات",
+    cv_vol_title:"العمل التطوعي", vol1_org:"الهلال الأحمر العربي السوري", vol1_desc:"مدرس متطوع · الرياضيات والفيزياء · 2017–2023 · مراكز نجران والسويداء",
+    vol2_org:"مدرسة نجران الابتدائية", vol2_desc:"دعم تعليمي مجاني في الرياضيات والفيزياء لطلاب جميع المراحل",
+    cv_edu_title:"التعليم", edu1_title:"بكالوريوس العمارة", edu1_org:"جامعة دمشق · 2014",
+    contact_eyebrow:"تواصل معي", contact_title:"لنبني\nشيئاً معاً",
+    contact_tagline:"سواء كان لديك مشروع، أو سؤال، أو مجرد رغبة في التواصل — يسعدني سماعك.",
+    contact_fb:"فيسبوك", contact_ig:"إنستغرام",
+    read_more:"قراءة المقال →"
+  },
+  fr: {
+    nav_home:"Accueil", nav_about:"À propos", nav_portfolio:"Portfolio", nav_videos:"Vidéos",
+    nav_research:"Recherche", nav_cv:"CV", nav_contact:"Contact",
+    hero_subtitle:"Université de Damas · Plus de 10 ans d'expérience",
+    hero_quote:"L'architecture n'est pas seulement un design —\nc'est une civilisation écrite dans la pierre.",
+    hero_cta1:"Voir le Portfolio", hero_cta2:"⬇ Télécharger CV", hero_relocation:"Ouvert à la relocalisation — Mégaprojets d'infrastructure internationaux", cv_view:"👁 Voir le CV", cv_title_inline:"Curriculum Vitae",
+    stat1:"Années d'expérience", stat2:"Grands projets", stat3:"Villes impactées", stat4:"Langues",
+    about_eyebrow:"Qui suis-je", about_title:"Construire des espaces,\nFaçonner des communautés",
+    about_mission:'"Je construis des espaces qui servent les communautés, préservent le patrimoine et inspirent l\'avenir."',
+    about_p1:"Je suis Anas Mahmoud Naser, architecte et ingénieur de chantier basé à As-Suwayda, Syrie, titulaire d'un bachelor en architecture de l'Université de Damas (2014).",
+    about_p2:"Ma carrière couvre la supervision de terrain de réseaux d'eau et d'assainissement, l'exécution de complexes résidentiels et la conception d'équipements communautaires.",
+    about_p3:"Je me suis également engagé comme enseignant bénévole de mathématiques et physique pour la Croix-Rouge arabe syrienne (2017–2023).",
+    about_p4:"Mon objectif est d'apporter cette expertise combinée d'exécution de terrain et de conception aux mégaprojets d'infrastructure et d'utilités à grande échelle en Arabie saoudite et dans la région du Golfe, où une supervision de chantier rigoureuse et une livraison rapide sont essentielles à la réussite.",
+    timeline_eyebrow:"Parcours", timeline_title:"Une décennie\nde pratique",
+    tl1_title:"Diplôme d'architecture", tl1_desc:"Diplômé de l'Université de Damas, Faculté d'Architecture.",
+    tl2_title:"Projets à Najran", tl2_desc:"Développement touristique et patrimonial.",
+    tl3_title:"Ingénieur de chantier", tl3_desc:"Supervision de grands projets d'infrastructure.",
+    tl4_title:"Bénévolat Croix-Rouge", tl4_desc:"Six ans d'enseignement bénévole.",
+    tl5_title:"Présent & Avenir", tl5_desc:"Recherche, publications et engagement international.",
+    portfolio_eyebrow:"Œuvres sélectionnées", portfolio_title:"Portfolio\nde projets",
+    filter_all:"Tous", filter_ext:"Design Extérieur", filter_int:"Design Intérieur", filter_infra:"Infrastructure",
+    videos_eyebrow:"Histoires Visuelles", videos_title:"Projets\nen Mouvement",
+    vid1_title:"Complexe résidentiel — Visite", vid1_desc:"12 bâtiments résidentiels, As-Suwayda",
+    vid2_title:"Centre social caritatif — Processus", vid2_desc:"Documentation de conception à réalisation",
+    vid3_title:"Village patrimonial de Najran", vid3_desc:"Développement touristique",
+    vid_add:"Ajoutez un lien YouTube pour activer",
+    research_eyebrow:"Revue Académique", research_title:"Recherches\net Écrits",
+    cv_eyebrow:"Profil Professionnel", cv_title:"Curriculum\nVitae",
+    cv_skills_title:"COMPÉTENCES TECHNIQUES", cv_download:"⬇  Télécharger CV complet", cv_download_note:"PDF · Disponible en anglais",
+    cv_lang_title:"Langues", lang_arabic:"Arabe (natif)", lang_english:"Anglais (B2)",
+    cv_strengths_title:"Points Forts",
+    strength1:"10+ ans d'expérience de terrain directe dans les réseaux d'eau, d'assainissement et d'utilités",
+    strength2:"Conception architecturale complète — plans et façades — pour un développement résidentiel de 9 villas",
+    strength3:"Expertise prouvée en bordereaux quantitatifs, rapports techniques et documentation de chantier",
+    strength4:"Prêt à se mobiliser pour des environnements de mégaprojets multiculturels et accélérés",
+    cv_vol_title:"Bénévolat", vol1_org:"Croix-Rouge arabe syrienne", vol1_desc:"Enseignant bénévole · 2017–2023 · centres de Najran et As-Suwayda",
+    vol2_org:"École primaire de Najran", vol2_desc:"Soutien éducatif gratuit en mathématiques et physique",
+    cv_edu_title:"Formation", edu1_title:"Licence en Architecture", edu1_org:"Université de Damas · 2014",
+    contact_eyebrow:"Me Contacter", contact_title:"Construisons\nquelque chose ensemble",
+    contact_tagline:"Que vous ayez un projet, une question ou simplement envie d'échanger — je serais ravi de vous entendre.",
+    contact_fb:"Facebook", contact_ig:"Instagram", read_more:"Lire l'article →"
+  },
+  es: {
+    nav_home:"Inicio", nav_about:"Sobre mí", nav_portfolio:"Portafolio", nav_videos:"Videos",
+    nav_research:"Investigación", nav_cv:"CV", nav_contact:"Contacto",
+    hero_subtitle:"Universidad de Damasco · Más de 10 años de experiencia",
+    hero_quote:"La arquitectura no es solo diseño —\nes una civilización escrita en piedra.",
+    hero_cta1:"Ver Portafolio", hero_cta2:"⬇ Descargar CV", hero_relocation:"Disponible para reubicación — Megaproyectos de infraestructura internacional", cv_view:"👁 Ver CV", cv_title_inline:"Currículum Vítae",
+    stat1:"Años de experiencia", stat2:"Proyectos principales", stat3:"Ciudades impactadas", stat4:"Idiomas",
+    about_eyebrow:"Quién soy", about_title:"Construyendo espacios,\nformando comunidades",
+    about_mission:'"Construyo espacios que sirven a las comunidades, preservan el patrimonio e inspiran el futuro."',
+    about_p1:"Soy Anas Mahmoud Naser, arquitecto e ingeniero de obra con base en As-Suwayda, Siria, con una licenciatura en Arquitectura de la Universidad de Damasco (2014).",
+    about_p2:"Mi carrera abarca la supervisión de campo de redes de agua y alcantarillado, la ejecución de complejos residenciales y el diseño de instalaciones comunitarias.",
+    about_p3:"También me desempeñé como docente voluntario de matemáticas y física en la Cruz Roja Árabe Siria (2017–2023).",
+    about_p4:"Mi objetivo es aportar esta experiencia combinada de ejecución de campo y diseño a megaproyectos de infraestructura y servicios a gran escala en Arabia Saudita y la región del Golfo, donde la supervisión disciplinada de obra y la entrega rápida son fundamentales para el éxito.",
+    timeline_eyebrow:"Trayectoria", timeline_title:"Una década\nde práctica",
+    tl1_title:"Título en Arquitectura", tl1_desc:"Graduado de la Universidad de Damasco.",
+    tl2_title:"Proyectos en Najran", tl2_desc:"Desarrollo turístico y patrimonial.",
+    tl3_title:"Ingeniero de Obra", tl3_desc:"Supervisión de grandes proyectos de infraestructura.",
+    tl4_title:"Voluntario Cruz Roja", tl4_desc:"Seis años de enseñanza voluntaria.",
+    tl5_title:"Presente y Futuro", tl5_desc:"Investigación, publicaciones y compromiso internacional.",
+    portfolio_eyebrow:"Obras seleccionadas", portfolio_title:"Portafolio\nde Proyectos",
+    filter_all:"Todo", filter_ext:"Diseño Exterior", filter_int:"Diseño Interior", filter_infra:"Infraestructura",
+    videos_eyebrow:"Historias Visuales", videos_title:"Proyectos\nen Movimiento",
+    vid1_title:"Complejo Habitacional — Recorrido", vid1_desc:"12 edificios residenciales, As-Suwayda",
+    vid2_title:"Centro Social Benéfico — Proceso", vid2_desc:"Documentación del diseño a la finalización",
+    vid3_title:"Pueblo Patrimonial de Najran", vid3_desc:"Desarrollo turístico e identidad estructural",
+    vid_add:"Agrega un enlace de YouTube para activar",
+    research_eyebrow:"Revista Académica", research_title:"Investigación\ny Escritos",
+    cv_eyebrow:"Perfil Profesional", cv_title:"Currículum\nVítae",
+    cv_skills_title:"HABILIDADES TÉCNICAS", cv_download:"⬇  Descargar CV completo", cv_download_note:"PDF · Disponible en inglés",
+    cv_lang_title:"Idiomas", lang_arabic:"Árabe (nativo)", lang_english:"Inglés (B2)",
+    cv_strengths_title:"Fortalezas Clave",
+    strength1:"Más de 10 años de experiencia directa en redes de agua, alcantarillado y servicios",
+    strength2:"Diseño arquitectónico completo — planos y fachadas — para un desarrollo de 9 villas",
+    strength3:"Experiencia comprobada en presupuestos (BoQ), informes técnicos y documentación de obra",
+    strength4:"Listo para movilizarse en entornos de megaproyectos multiculturales y acelerados",
+    cv_vol_title:"Voluntariado", vol1_org:"Cruz Roja Árabe Siria", vol1_desc:"Docente voluntario · 2017–2023 · centros de Najran y As-Suwayda",
+    vol2_org:"Escuela Primaria de Najran", vol2_desc:"Apoyo educativo gratuito en matemáticas y física",
+    cv_edu_title:"Educación", edu1_title:"Lic. en Arquitectura", edu1_org:"Universidad de Damasco · 2014",
+    contact_eyebrow:"Contacto", contact_title:"Construyamos\nalgo juntos",
+    contact_tagline:"Ya sea que tengas un proyecto, una pregunta o simplemente quieras conectar — me encantaría escucharte.",
+    contact_fb:"Facebook", contact_ig:"Instagram", read_more:"Leer artículo →"
+  },
+  pt: {
+    nav_home:"Início", nav_about:"Sobre mim", nav_portfolio:"Portfólio", nav_videos:"Vídeos",
+    nav_research:"Pesquisa", nav_cv:"CV", nav_contact:"Contato",
+    hero_subtitle:"Universidade de Damasco · Mais de 10 anos de experiência",
+    hero_quote:"A arquitetura não é apenas design —\né uma civilização escrita em pedra.",
+    hero_cta1:"Ver Portfólio", hero_cta2:"⬇ Baixar CV", hero_relocation:"Disponível para realocação — Megaprojetos de infraestrutura internacional", cv_view:"👁 Ver CV", cv_title_inline:"Curriculum Vitae",
+    stat1:"Anos de experiência", stat2:"Grandes projetos", stat3:"Cidades impactadas", stat4:"Idiomas",
+    about_eyebrow:"Quem sou", about_title:"Construindo espaços,\nformando comunidades",
+    about_mission:'"Construo espaços que servem comunidades, preservam o patrimônio e inspiram o futuro."',
+    about_p1:"Sou Anas Mahmoud Naser, arquiteto e engenheiro de obras em As-Suwayda, Síria, com bacharelado em Arquitetura pela Universidade de Damasco (2014).",
+    about_p2:"Minha carreira abrange supervisão de campo de redes de água e esgoto, execução de complexos residenciais e design de instalações comunitárias.",
+    about_p3:"Também atuei como professor voluntário de matemática e física na Cruz Vermelha Árabe Síria (2017–2023).",
+    about_p4:"Meu objetivo é trazer essa experiência combinada de execução em campo e design para megaprojetos de infraestrutura e utilidades em larga escala na Arábia Saudita e na região do Golfo, onde a supervisão disciplinada de obra e a entrega acelerada são essenciais para o sucesso.",
+    timeline_eyebrow:"Trajetória", timeline_title:"Uma década\nde prática",
+    tl1_title:"Graduação em Arquitetura", tl1_desc:"Formado pela Universidade de Damasco.",
+    tl2_title:"Projetos em Najran", tl2_desc:"Desenvolvimento turístico e patrimonial.",
+    tl3_title:"Engenheiro de Obras", tl3_desc:"Supervisão de grandes projetos de infraestrutura.",
+    tl4_title:"Voluntário Cruz Vermelha", tl4_desc:"Seis anos de ensino voluntário.",
+    tl5_title:"Presente e Futuro", tl5_desc:"Pesquisa, publicações e engajamento internacional.",
+    portfolio_eyebrow:"Obras selecionadas", portfolio_title:"Portfólio\nde Projetos",
+    filter_all:"Todos", filter_ext:"Design Exterior", filter_int:"Design Interior", filter_infra:"Infraestrutura",
+    videos_eyebrow:"Histórias Visuais", videos_title:"Projetos\nem Movimento",
+    vid1_title:"Complexo Habitacional — Tour", vid1_desc:"12 edifícios residenciais, As-Suwayda",
+    vid2_title:"Centro Social de Caridade — Processo", vid2_desc:"Documentação do projeto ao fim",
+    vid3_title:"Vila Patrimonial de Najran", vid3_desc:"Desenvolvimento turístico e identidade estrutural",
+    vid_add:"Adicione um link do YouTube para ativar",
+    research_eyebrow:"Revista Acadêmica", research_title:"Pesquisa\ne Escritos",
+    cv_eyebrow:"Perfil Profissional", cv_title:"Curriculum\nVitae",
+    cv_skills_title:"HABILIDADES TÉCNICAS", cv_download:"⬇  Baixar CV completo", cv_download_note:"PDF · Disponível em inglês",
+    cv_lang_title:"Idiomas", lang_arabic:"Árabe (nativo)", lang_english:"Inglês (B2)",
+    cv_strengths_title:"Pontos Fortes",
+    strength1:"Mais de 10 anos de experiência direta em redes de água, esgoto e utilidades",
+    strength2:"Design arquitetônico completo — plantas e fachadas — para um empreendimento de 9 vilas",
+    strength3:"Experiência comprovada em BoQs, relatórios técnicos e documentação de obra",
+    strength4:"Pronto para mobilização em ambientes de megaprojetos multiculturais e acelerados",
+    cv_vol_title:"Voluntariado", vol1_org:"Cruz Vermelha Árabe Síria", vol1_desc:"Professor voluntário · 2017–2023 · centros de Najran e As-Suwayda",
+    vol2_org:"Escola Primária de Najran", vol2_desc:"Apoio educacional gratuito em matemática e física",
+    cv_edu_title:"Educação", edu1_title:"Bacharelado em Arquitetura", edu1_org:"Universidade de Damasco · 2014",
+    contact_eyebrow:"Entre em Contato", contact_title:"Vamos construir\nalgo juntos",
+    contact_tagline:"Seja para um projeto, uma pergunta ou simplesmente para se conectar — adoraria ouvir você.",
+    contact_fb:"Facebook", contact_ig:"Instagram", read_more:"Ler artigo →"
+  },
+  ru: {
+    nav_home:"Главная", nav_about:"Обо мне", nav_portfolio:"Портфолио", nav_videos:"Видео",
+    nav_research:"Исследования", nav_cv:"Резюме", nav_contact:"Контакт",
+    hero_subtitle:"Дамасский университет · более 10 лет опыта",
+    hero_quote:"Архитектура — это не просто дизайн —\nэто цивилизация, написанная в камне.",
+    hero_cta1:"Смотреть портфолио", hero_cta2:"⬇ Скачать резюме", hero_relocation:"Готов к переезду — международные инфраструктурные мегапроекты", cv_view:"👁 Просмотреть резюме", cv_title_inline:"Резюме",
+    stat1:"Лет опыта", stat2:"Крупных проектов", stat3:"Городов", stat4:"Языков",
+    about_eyebrow:"Кто я", about_title:"Строю пространства,\nформирую сообщества",
+    about_mission:'"Я создаю пространства, которые служат обществу, сохраняют наследие и вдохновляют будущее."',
+    about_p1:"Я — Анас Махмуд Насер, архитектор и инженер-строитель из Эс-Сувейды, Сирия, с дипломом бакалавра архитектуры Дамасского университета (2014).",
+    about_p2:"Моя карьера включает надзор за строительными работами, водопроводными и канализационными системами, жилыми комплексами и общественными учреждениями.",
+    about_p3:"Я также работал волонтёром-учителем математики и физики в Сирийском Красном Полумесяце (2017–2023).",
+    about_p4:"Моя цель — применить этот сочетанный опыт полевого исполнения и проектирования на крупных инфраструктурных и коммунальных мегапроектах в Саудовской Аравии и регионе Персидского залива, где дисциплинированный контроль на объекте и быстрая сдача проекта критически важны для успеха.",
+    timeline_eyebrow:"Карьерный путь", timeline_title:"Десятилетие\nпрактики",
+    tl1_title:"Диплом архитектора", tl1_desc:"Окончил Дамасский университет, факультет архитектуры.",
+    tl2_title:"Проекты в деревне Наджран", tl2_desc:"Развитие туризма и охрана наследия.",
+    tl3_title:"Прораб — Эс-Сувейда", tl3_desc:"Надзор за крупными инфраструктурными проектами.",
+    tl4_title:"Волонтёр Красного Полумесяца", tl4_desc:"Шесть лет волонтёрского преподавания.",
+    tl5_title:"Настоящее и будущее", tl5_desc:"Исследования, публикации и международное сотрудничество.",
+    portfolio_eyebrow:"Избранные работы", portfolio_title:"Портфолио\nпроектов",
+    filter_all:"Все работы", filter_ext:"Экстерьер", filter_int:"Интерьер", filter_infra:"Инфраструктура",
+    videos_eyebrow:"Визуальные истории", videos_title:"Проекты\nв движении",
+    vid1_title:"Жилой комплекс — Обзор", vid1_desc:"12 жилых зданий, Эс-Сувейда",
+    vid2_title:"Благотворительный центр — Процесс", vid2_desc:"Документация от проекта до завершения",
+    vid3_title:"Деревня Наджран — Экскурсия", vid3_desc:"Туристическое развитие",
+    vid_add:"Добавьте ссылку YouTube для активации",
+    research_eyebrow:"Академический журнал", research_title:"Исследования\nи публикации",
+    cv_eyebrow:"Профессиональный профиль", cv_title:"Резюме",
+    cv_skills_title:"ТЕХНИЧЕСКИЕ НАВЫКИ", cv_download:"⬇  Скачать резюме", cv_download_note:"PDF · На английском языке",
+    cv_lang_title:"Языки", lang_arabic:"Арабский (родной)", lang_english:"Английский (B2)",
+    cv_strengths_title:"Ключевые сильные стороны",
+    strength1:"Более 10 лет непосредственного полевого опыта в сетях водоснабжения, канализации и коммунальных сетях",
+    strength2:"Полный архитектурный проект — планы и фасады — для жилого комплекса из 9 вилл",
+    strength3:"Подтверждённый опыт подготовки смет, технических отчётов и пошаговой документации объекта",
+    strength4:"Готов к быстрой мобилизации в мультикультурных условиях мегапроектов",
+    cv_vol_title:"Волонтёрство", vol1_org:"Сирийский Красный Полумесяц", vol1_desc:"Учитель-волонтёр · 2017–2023 · центры в Наджране и Эс-Сувейде",
+    vol2_org:"Начальная школа Наджрана", vol2_desc:"Бесплатная образовательная поддержка по математике и физике",
+    cv_edu_title:"Образование", edu1_title:"Бакалавр архитектуры", edu1_org:"Дамасский университет · 2014",
+    contact_eyebrow:"Связаться", contact_title:"Создадим\nчто-то вместе",
+    contact_tagline:"Есть проект, вопрос или просто хотите пообщаться — буду рад услышать вас.",
+    contact_fb:"Facebook", contact_ig:"Instagram", read_more:"Читать статью →"
+  },
+  tr: {
+    nav_home:"Ana Sayfa", nav_about:"Hakkımda", nav_portfolio:"Portföy", nav_videos:"Videolar",
+    nav_research:"Araştırma", nav_cv:"Özgeçmiş", nav_contact:"İletişim",
+    hero_subtitle:"Şam Üniversitesi · 10+ Yıl Deneyim",
+    hero_quote:"Mimarlık sadece tasarım değildir —\ntaşa yazılmış bir uygarlıktır.",
+    hero_cta1:"Portföyü Gör", hero_cta2:"⬇ CV İndir", hero_relocation:"Yer Değiştirmeye Açık — Uluslararası Altyapı Mega Projeleri", cv_view:"👁 CV'yi Görüntüle", cv_title_inline:"Özgeçmiş",
+    stat1:"Yıllık Deneyim", stat2:"Büyük Proje", stat3:"Etkilenen Şehir", stat4:"Dil",
+    about_eyebrow:"Ben Kimim", about_title:"Mekânlar İnşa Ediyorum,\nTopluluklar Şekillendiriyorum",
+    about_mission:'"Topluluklara hizmet eden, mirası koruyan ve geleceği ilham veren mekânlar inşa ediyorum."',
+    about_p1:"Ben Anas Mahmoud Naser, Suriye'nin As-Suwayda şehrinde faaliyet gösteren bir mimar ve şantiye mühendisiyim. Şam Üniversitesi'nden mimarlık lisansım var (2014).",
+    about_p2:"Kariyerim su ve kanalizasyon ağlarının saha denetimini, konut komplekslerinin yürütülmesini ve toplum tesislerinin tasarımını kapsamaktadır.",
+    about_p3:"Aynı zamanda Suriye Arap Kızılay'ında gönüllü matematik ve fizik öğretmeni olarak görev yaptım (2017–2023).",
+    about_p4:"Hedefim, bu saha uygulaması ve tasarım deneyimini Suudi Arabistan ve Körfez bölgesindeki büyük ölçekli altyapı ve hizmet mega projelerine taşımaktır; burada disiplinli şantiye denetimi ve hızlı teslimat başarı için kritik öneme sahiptir.",
+    timeline_eyebrow:"Kariyer Yolu", timeline_title:"Bir Dekatlık\nUygulama",
+    tl1_title:"Mimarlık Derecesi", tl1_desc:"Şam Üniversitesi, Mimarlık Fakültesi mezunu.",
+    tl2_title:"Necran Köyü Projeleri", tl2_desc:"Turizm ve miras gelişimi.",
+    tl3_title:"Şantiye Mühendisi", tl3_desc:"Büyük altyapı projelerinin denetimi.",
+    tl4_title:"Kızılay Gönüllüsü", tl4_desc:"Altı yıl gönüllü öğretmenlik.",
+    tl5_title:"Şimdi ve İleri", tl5_desc:"Araştırma, yayın ve uluslararası katılım.",
+    portfolio_eyebrow:"Seçilmiş Çalışmalar", portfolio_title:"Proje\nPortföyü",
+    filter_all:"Tümü", filter_ext:"Dış Tasarım", filter_int:"İç Tasarım", filter_infra:"Altyapı",
+    videos_eyebrow:"Görsel Hikayeler", videos_title:"Hareketteki\nProjeler",
+    vid1_title:"Gençlik Konut Kompleksi — Tur", vid1_desc:"12 konut binası, As-Suwayda",
+    vid2_title:"Sosyal Merkez — Süreç", vid2_desc:"Tasarımdan tamamlamaya belgeleme",
+    vid3_title:"Necran Miras Köyü — Saha Turu", vid3_desc:"Turizm geliştirme",
+    vid_add:"Etkinleştirmek için YouTube bağlantısı ekleyin",
+    research_eyebrow:"Akademik Dergi", research_title:"Araştırmalar\nve Yazılar",
+    cv_eyebrow:"Profesyonel Profil", cv_title:"Özgeçmiş",
+    cv_skills_title:"TEKNİK BECERİLER", cv_download:"⬇  Tam Özgeçmiş İndir", cv_download_note:"PDF · İngilizce mevcut",
+    cv_lang_title:"Diller", lang_arabic:"Arapça (anadil)", lang_english:"İngilizce (B2)",
+    cv_strengths_title:"Temel Güçlü Yönler",
+    strength1:"Su, kanalizasyon ve altyapı şebekelerinde 10+ yıl doğrudan saha deneyimi",
+    strength2:"9 villalık bir konut projesi için tam mimari tasarım — planlar ve cepheler",
+    strength3:"Kanıtlanmış metraj (BoQ) hazırlığı, teknik raporlama ve saha belgeleme deneyimi",
+    strength4:"Hızlı tempolu, çok kültürlü mega proje ortamlarına seferber olmaya hazır",
+    cv_vol_title:"Gönüllü Çalışma", vol1_org:"Suriye Arap Kızılay'ı", vol1_desc:"Gönüllü öğretmen · 2017–2023 · Necran ve Es-Süveyda merkezleri",
+    vol2_org:"Necran İlkokulu", vol2_desc:"Matematik ve fizikte ücretsiz eğitim desteği",
+    cv_edu_title:"Eğitim", edu1_title:"Mimarlık Lisansı", edu1_org:"Şam Üniversitesi · 2014",
+    contact_eyebrow:"İletişime Geç", contact_title:"Birlikte\nBir Şey İnşa Edelim",
+    contact_tagline:"Bir projeniz, sorunuz veya sadece bağlantı kurmak istemeniz fark etmez — sizi duymaktan mutluluk duyarım.",
+    contact_fb:"Facebook", contact_ig:"Instagram", read_more:"Makaleyi oku →"
+  },
+  it: {
+    nav_home:"Home", nav_about:"Chi sono", nav_portfolio:"Portfolio", nav_videos:"Video",
+    nav_research:"Ricerca", nav_cv:"CV", nav_contact:"Contatti",
+    hero_subtitle:"Università di Damasco · Oltre 10 anni di esperienza",
+    hero_quote:"L'architettura non è solo design —\nè una civiltà scritta nella pietra.",
+    hero_cta1:"Vedi Portfolio", hero_cta2:"⬇ Scarica CV", hero_relocation:"Disponibile al trasferimento — Megaprogetti infrastrutturali internazionali", cv_view:"👁 Visualizza CV", cv_title_inline:"Curriculum Vitae",
+    stat1:"Anni di esperienza", stat2:"Grandi progetti", stat3:"Città coinvolte", stat4:"Lingue",
+    about_eyebrow:"Chi sono", about_title:"Costruire spazi,\nformare comunità",
+    about_mission:'"Costruisco spazi che servono le comunità, preservano il patrimonio e ispirano il futuro."',
+    about_p1:"Sono Anas Mahmoud Naser, architetto e ingegnere di cantiere con sede ad As-Suwayda, Siria, con una laurea in Architettura dall'Università di Damasco (2014).",
+    about_p2:"La mia carriera comprende la supervisione in campo di reti idrauliche e fognarie, l'esecuzione di complessi residenziali e la progettazione di strutture comunitarie.",
+    about_p3:"Ho anche prestato servizio come insegnante volontario di matematica e fisica per la Croce Rossa Araba Siriana (2017–2023).",
+    about_p4:"Il mio obiettivo è portare questa esperienza combinata di esecuzione sul campo e progettazione in megaprogetti infrastrutturali e di servizi su larga scala in Arabia Saudita e nella regione del Golfo, dove una supervisione disciplinata del cantiere e una consegna rapida sono fondamentali per il successo.",
+    timeline_eyebrow:"Percorso", timeline_title:"Un decennio\ndi pratica",
+    tl1_title:"Laurea in Architettura", tl1_desc:"Laureato all'Università di Damasco.",
+    tl2_title:"Progetti a Najran", tl2_desc:"Sviluppo turistico e patrimoniale.",
+    tl3_title:"Ingegnere di Cantiere", tl3_desc:"Supervisione di grandi progetti infrastrutturali.",
+    tl4_title:"Volontario Croce Rossa", tl4_desc:"Sei anni di insegnamento volontario.",
+    tl5_title:"Presente e Futuro", tl5_desc:"Ricerca, pubblicazioni e impegno internazionale.",
+    portfolio_eyebrow:"Opere selezionate", portfolio_title:"Portfolio\ndi Progetti",
+    filter_all:"Tutti", filter_ext:"Design Esterno", filter_int:"Design Interno", filter_infra:"Infrastrutture",
+    videos_eyebrow:"Storie Visive", videos_title:"Progetti\nin Movimento",
+    vid1_title:"Complesso Residenziale — Tour", vid1_desc:"12 edifici residenziali, As-Suwayda",
+    vid2_title:"Centro Sociale Benefico — Processo", vid2_desc:"Documentazione dalla progettazione al completamento",
+    vid3_title:"Villaggio Patrimonio di Najran", vid3_desc:"Sviluppo turistico e identità strutturale",
+    vid_add:"Aggiungi un link YouTube per attivare",
+    research_eyebrow:"Rivista Accademica", research_title:"Ricerca\ne Scritti",
+    cv_eyebrow:"Profilo Professionale", cv_title:"Curriculum\nVitae",
+    cv_skills_title:"COMPETENZE TECNICHE", cv_download:"⬇  Scarica CV completo", cv_download_note:"PDF · Disponibile in inglese",
+    cv_lang_title:"Lingue", lang_arabic:"Arabo (madrelingua)", lang_english:"Inglese (B2)",
+    cv_strengths_title:"Punti di Forza",
+    strength1:"Oltre 10 anni di esperienza diretta sul campo in reti idriche, fognarie e di pubblica utilità",
+    strength2:"Progettazione architettonica completa — piante e facciate — per uno sviluppo residenziale di 9 ville",
+    strength3:"Esperienza comprovata nella preparazione di computi metrici, report tecnici e documentazione di cantiere",
+    strength4:"Pronto alla mobilitazione in ambienti di megaprogetti multiculturali e a ritmo accelerato",
+    cv_vol_title:"Volontariato", vol1_org:"Croce Rossa Araba Siriana", vol1_desc:"Insegnante volontario · 2017–2023 · centri di Najran e As-Suwayda",
+    vol2_org:"Scuola Primaria di Najran", vol2_desc:"Supporto educativo gratuito in matematica e fisica",
+    cv_edu_title:"Istruzione", edu1_title:"Laurea in Architettura", edu1_org:"Università di Damasco · 2014",
+    contact_eyebrow:"Contattami", contact_title:"Costruiamo\nqualcosa insieme",
+    contact_tagline:"Che tu abbia un progetto, una domanda o voglia semplicemente connetterti — sarò felice di sentirti.",
+    contact_fb:"Facebook", contact_ig:"Instagram", read_more:"Leggi articolo →"
+  }
+};
+
+// =============================================
+// RENDER PROJECTS
+// =============================================
+function renderProjects(filter = 'all') {
+  const grid = document.getElementById('portfolioGrid');
+  const filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === filter);
+  grid.innerHTML = filtered.map(p => `
+    <div class="project-card fade-in" data-cat="${p.category}">
+      <div class="project-card-img">
+        <div class="project-img-placeholder">
+          <span class="project-img-icon">${p.icon}</span>
+        </div>
+      </div>
+      <div class="project-card-body">
+        <p class="project-category">${p.category}</p>
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <div class="project-year">
+          <span>${p.year}</span>
+          <span class="project-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  observeFadeIns();
+}
+
+// =============================================
+// RENDER RESEARCH
+// =============================================
+function renderResearch(lang) {
+  const grid = document.getElementById('researchGrid');
+  const readMore = T[lang]?.read_more || T.en.read_more;
+  grid.innerHTML = RESEARCH.map(r => `
+    <div class="research-card fade-in">
+      <p class="research-tag">${r.category}</p>
+      <h3>${r.title}</h3>
+      <p>${r.abstract}</p>
+      <div class="research-meta">
+        <span>${r.date}</span>
+        <a href="${r.link}" class="research-link">${readMore}</a>
+      </div>
+    </div>
+  `).join('');
+  observeFadeIns();
+}
+
+// =============================================
+// RENDER SKILLS
+// =============================================
+function renderSkills() {
+  const container = document.getElementById('skillsContainer');
+  container.innerHTML = SKILLS.map(s => `
+    <div class="skill-row">
+      <div class="skill-label">
+        <span>${s.name}</span>
+        <span class="skill-level">${s.level}</span>
+      </div>
+      <div class="skill-bar">
+        <div class="skill-fill" style="--skill-w:${s.pct}%"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// =============================================
+// LANGUAGE SWITCHER
+// =============================================
+let currentLang = 'en';
+
+function applyLang(lang) {
+  currentLang = lang;
+  const t = T[lang] || T.en;
+  const isAr = lang === 'ar';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+  });
+
+  renderResearch(lang);
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyLang(btn.getAttribute('data-lang')));
+});
+
+// =============================================
+// PORTFOLIO FILTER
+// =============================================
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProjects(btn.getAttribute('data-filter'));
+  });
+});
+
+// =============================================
+// NAV SCROLL & ACTIVE LINKS
+// =============================================
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+  const sections = document.querySelectorAll('section[id]');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+// =============================================
+// MOBILE NAV
+// =============================================
+const toggle = document.getElementById('navToggle');
+const mobileNav = document.getElementById('navMobile');
+toggle.addEventListener('click', () => {
+  mobileNav.classList.toggle('open');
+});
+document.querySelectorAll('.nav-mobile a').forEach(a => {
+  a.addEventListener('click', () => mobileNav.classList.remove('open'));
+});
+
+// =============================================
+// FADE IN OBSERVER
+// =============================================
+function observeFadeIns() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in:not(.visible)').forEach(el => observer.observe(el));
+}
+
+// Skill bar animation
+function observeSkills() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.skill-fill').forEach(f => f.classList.add('animated'));
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  const container = document.getElementById('skillsContainer');
+  if (container) observer.observe(container);
+}
+
+// =============================================
+// SOCIAL LINKS
+// =============================================
+document.getElementById('fbLink').href = OWNER.facebook;
+document.getElementById('igLink').href = OWNER.instagram;
+
+// =============================================
+// CV VIEWER MODAL
+// =============================================
+const cvModal = document.getElementById('cvModal');
+const cvModalFrame = document.getElementById('cvModalFrame');
+const cvModalClose = document.getElementById('cvModalClose');
+
+function openCvModal() {
+  cvModalFrame.src = OWNER.cvFile;
+  cvModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCvModal() {
+  cvModal.classList.remove('open');
+  document.body.style.overflow = '';
+  cvModalFrame.src = '';
+}
+document.querySelectorAll('.cv-view-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openCvModal();
+  });
+});
+cvModalClose.addEventListener('click', closeCvModal);
+cvModal.addEventListener('click', (e) => { if (e.target === cvModal) closeCvModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCvModal(); });
+
+// =============================================
+// INIT
+// =============================================
+renderProjects();
+renderResearch('en');
+renderSkills();
+observeFadeIns();
+observeSkills();
+
+// GitHub deployment note (hidden)
+/*
+ HOW TO DEPLOY ON GITHUB PAGES:
+ 1. Go to github.com and create a free account
+ 2. Create a new repository named: yourusername.github.io
+ 3. Upload this file as: index.html
+ 4. Upload: CV.pdf (your CV file)
+ 5. Upload: anas-profile.jpg (your photo)
+ 6. For project images: ext-01.jpg, int-01.jpg, infra-01.jpg etc.
+ 7. Go to Settings → Pages → Deploy from main branch
+ 8. Live at: https://yourusername.github.io
+
+ EASY EDITS:
+ - Your social links: search for OWNER.facebook / OWNER.instagram
+ - Add projects: copy a block in the PROJECTS array
+ - Add research: copy a block in the RESEARCH array
+ - Change language content: edit the T object above
+*/
+</script>
+</body>
+</html>
